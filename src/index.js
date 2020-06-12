@@ -4,7 +4,7 @@ import webScreenshot from "./apis/webScreenshot"
 import NodeCache from "node-cache"
 
 const app = express();
-const port = 3000;
+const port = 8080;
 const cache = new NodeCache({ stdTTL: 60});
 
 app.use(express.urlencoded({ extended: true }));

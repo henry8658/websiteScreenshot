@@ -1,29 +1,33 @@
-import puppeteer from "puppeteer";
-import sharp from "sharp"
+import puppeteer from "puppeteer-extra"
+import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
+puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 async function webScreenshot( websiteURL ) {
-    const browser = await puppeteer.launch({ 
-        defaultViewport: {width: 1920, height: 1280}
-    });
-    const page = await browser.newPage();
-   
     try {
-        await page.goto( websiteURL );
-    } catch {
-        throw new Error("This site can't be reached");
+        const browser = await puppeteer.connect({ 
+            browserWSEndpoint: 'ws://localhost:3000'
+        });
+
+        const page = await browser.newPage();
+        const start = Date.now();
+        try {
+            await page.goto( websiteURL, {
+                timeout: 25000,
+                waitUntil: 'networkidle2'
+            });
+        } catch {
+            throw new Error("This site can't be reached");
+        }
+        console.log('Took', Date.now() - start, 'ms');
+
+        const screenshot = await page.screenshot({ encoding: "base64" }); 
+
+        browser.close();
+
+        return screenshot;
+    } catch(e) { 
+        if (browser) browser.close();
     }
-
-    const screenshot = await page.screenshot({ encoding: true });
-
-    const base64Image = await sharp(screenshot).resize({
-         width: 800,
-         height:600,
-         fit: 'fill'
-    }).toBuffer();
-
-    await browser.close();
-
-    return base64Image.toString('base64');
 }
 
 export default webScreenshot;
