@@ -28,4 +28,4 @@ app.post('/', async (req, res) => {
 });
 
 
-app.listen(port, () => console.log(`app listening on ${port}`))
+app.listen(port, '0.0.0.0', () => console.log(`app listening on ${port}`))

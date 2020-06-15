@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  web-screenshot:
+    build: .
+    ports:
+      - "8080:8080"
+  browserless:
+    image: "browserless/chrome"
+    ports: 
+      - "3000:3000"
+    environment:
+      - PREBOOT_CHROME=true
+      - MAX_CONCURRENT_SESSIONS=10
+      - DEFAULT_BLOCK_ADS=true

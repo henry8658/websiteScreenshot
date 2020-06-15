@@ -1,11 +1,11 @@
 import puppeteer from "puppeteer-extra"
-import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
+import AdblockerPlugin from "puppeteer-extra-plugin-adblocker"
 puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 async function webScreenshot( websiteURL ) {
     try {
         const browser = await puppeteer.connect({ 
-            browserWSEndpoint: 'ws://localhost:3000'
+            browserWSEndpoint: 'ws://browserless:3000'
         });
 
         const page = await browser.newPage();
